@@ -12,12 +12,12 @@ public class Main {
             while(choice != 6){
 
                 System.out.println("Choose an Operation");
-                System.out.println("1. add");
-                System.out.println("2. subtract");
-                System.out.println("3. multiply");
-                System.out.println("4. divide");
-                System.out.println("5. quadratic");
-                System.out.println("6. end program");
+                System.out.println("1. Add");
+                System.out.println("2. Subtract");
+                System.out.println("3. Multiply");
+                System.out.println("4. Divide");
+                System.out.println("5. Quadratic");
+                System.out.println("6. End program");
 
                 System.out.println("Enter Choice");
                 choice = input.takeInt();
