@@ -5,51 +5,76 @@ import MathUtil.BasicOperations;
 public class Main {
     public static void main(String[] args) {
             InputScanner input = new InputScanner();
-            int choice = 0, val1, val2, result;
+            int choice = 0, ival1, ival2, iresult;
+            double dval1, dval2, dval3, dresult[];
             BasicOperations calculate = new BasicOperations();
 
-            while(choice != 5){
+            while(choice != 6){
 
                 System.out.println("Choose an Operation");
                 System.out.println("1. add");
                 System.out.println("2. subtract");
                 System.out.println("3. multiply");
                 System.out.println("4. divide");
-                System.out.println("5. end program");
+                System.out.println("5. quadratic");
+                System.out.println("6. end program");
 
                 System.out.println("Enter Choice");
                 choice = input.takeInt();
 
                 switch(choice){
                     case 1:
-                        val1 = input.takeInt();
-                        val2 = input.takeInt();
-                        result = calculate.add(val1, val2);
-                        System.out.println("The Sum is " + result);
+                        System.out.println("Input value1: ");
+                        ival1 = input.takeInt();
+                        System.out.println("Input value2: ");
+                        ival2 = input.takeInt();
+                        iresult = calculate.add(ival1, ival2);
+                        System.out.println("The Sum is " + iresult);
                         break;
 
                     case 2:
-                        val1 = input.takeInt();
-                        val2 = input.takeInt();
-                        result = calculate.subtract(val1, val2);
-                        System.out.println("The Difference is " + result);
+                        System.out.println("Input value1: ");
+                        ival1 = input.takeInt();
+                        System.out.println("Input value2: ");
+                        ival2 = input.takeInt();
+                        iresult = calculate.subtract(ival1, ival2);
+                        System.out.println("The Difference is " + iresult);
                         break;
 
                     case 3:
-                        val1 = input.takeInt();
-                        val2 = input.takeInt();
-                        result = calculate.multiply(val1, val2);
-                        System.out.println("The Product is " + result);
+                        System.out.println("Input value1: ");
+                        ival1 = input.takeInt();
+                        System.out.println("Input value2: ");
+                        ival2 = input.takeInt();
+                        iresult = calculate.multiply(ival1, ival2);
+                        System.out.println("The Product is " + iresult);
                         break;
 
                     case 4:
-                        val1 = input.takeInt();
-                        val2 = input.takeInt();
-                        result = calculate.divide(val1, val2);
-                        System.out.println("The Quotient " + result);
+                        System.out.println("Input value1: ");
+                        ival1 = input.takeInt();
+                        System.out.println("Input value2: ");
+                        ival2 = input.takeInt();
+                        iresult = calculate.divide(ival1, ival2);
+                        System.out.println("The Quotient " + iresult);
                         break;
 
                     case 5:
+                        System.out.println("Input A: ");
+                        dval1 = input.takeDouble();
+                        System.out.println("Input B: ");
+                        dval2 = input.takeDouble();
+                        System.out.println("Input C: ");
+                        dval3 = input.takeDouble();
+                        dresult = calculate.quadratic(dval2,dval1, dval3);
+                        if (dresult.length == 0) {
+                            System.out.println("No real roots.");
+                        } else {
+                            System.out.println("The result is " + dresult[0]);
+                            System.out.println("The result is " + dresult[1]);
+                        }
+                        break;
+                    case 6:
                         break;
 
                     default:
