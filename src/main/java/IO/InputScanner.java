@@ -12,5 +12,9 @@ public class InputScanner {
         return input.nextInt() ;
     }
 
+    public String takeString() {
+        Scanner input = new Scanner(System.in);
+        return input.nextLine() ;
+    }
 }
 

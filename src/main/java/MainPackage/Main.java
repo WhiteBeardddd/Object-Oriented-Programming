@@ -1,15 +1,18 @@
 package MainPackage;
-import IO.InputScanner;
+import IO.*;
 import MathUtil.BasicOperations;
 
 public class Main {
     public static void main(String[] args) {
             InputScanner input = new InputScanner();
+            Palindrome palindrome = new Palindrome();
+            BasicOperations calculate = new BasicOperations();
             int choice = 0, ival1, ival2, iresult;
             double dval1, dval2, dval3, dresult[];
-            BasicOperations calculate = new BasicOperations();
+            String s;
+            boolean flag;
 
-            while(choice != 6){
+            while(choice != 7){
 
                 System.out.println("Choose an Operation");
                 System.out.println("1. Add");
@@ -17,7 +20,8 @@ public class Main {
                 System.out.println("3. Multiply");
                 System.out.println("4. Divide");
                 System.out.println("5. Quadratic");
-                System.out.println("6. End program");
+                System.out.println("6. CheckPalindrome");
+                System.out.println("7. End program");
 
                 System.out.println("Enter Choice");
                 choice = input.takeInt();
@@ -74,7 +78,19 @@ public class Main {
                             System.out.println("The result is " + dresult[1]);
                         }
                         break;
+
                     case 6:
+                        System.out.println("Input String: ");
+                        s = input.takeString();
+                        flag = palindrome.isPalindrome(s);
+                        if (flag == true){
+                            System.out.println("Palindrome");
+                        } else {
+                            System.out.println("Not Palindrome");
+                        }
+                        break;
+
+                    case 7:
                         break;
 
                     default:
