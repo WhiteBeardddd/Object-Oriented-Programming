@@ -1,40 +1,35 @@
-package UI;
+package Views;
+
+import Controllers.CalculatorController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import MathUtil.CalculatorController;
 
 public class CalculatorUI implements ActionListener {
+    private JPanel mainPanel;
+    private JTextField textfield;
+    private JButton[] numberButtons = new JButton[10];
+    private JButton[] functionButtons = new JButton[9];
+    private JButton addButton, subButton, mulButton, divButton;
+    private JButton decButton, equButton, delButton, clrButton, negButton;
 
-    JFrame frame;
-    JTextField textfield;
-    JButton[] numberButtons = new JButton[10];
-    JButton[] functionButtons = new JButton[9];
-    JButton addButton, subButton, mulButton, divButton;
-    JButton decButton, equButton, delButton, clrButton, negButton;
-    JPanel panel;
-
-    Font myFont = new Font("Roboto Mono", Font.BOLD, 24);
-
-    CalculatorController controller = new CalculatorController();
+    private CalculatorController controller = new CalculatorController();
 
     public CalculatorUI() {
-        frame = new JFrame("Robotic Calculator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(420, 550);
-        frame.setLayout(null);
-        frame.getContentPane().setBackground(new Color(20, 20, 20)); // dark background
+        mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+        mainPanel.setPreferredSize(new Dimension(420, 550));
+        mainPanel.setBackground(new Color(20, 20, 20));
 
         textfield = new JTextField();
         textfield.setBounds(50, 25, 300, 50);
-        textfield.setFont(myFont);
+        textfield.setFont(new Font("Roboto Mono", Font.BOLD, 24));
         textfield.setEditable(false);
         textfield.setBackground(Color.BLACK);
-        textfield.setForeground(new Color(0, 255, 0)); // glowing green numbers
+        textfield.setForeground(new Color(0, 255, 0));
         textfield.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 2));
 
-        // Create buttons
         addButton = new JButton("+");
         subButton = new JButton("-");
         mulButton = new JButton("*");
@@ -55,9 +50,9 @@ public class CalculatorUI implements ActionListener {
         functionButtons[7] = clrButton;
         functionButtons[8] = negButton;
 
-        for (int i = 0; i < 9; i++) {
-            styleButton(functionButtons[i]);
-            functionButtons[i].addActionListener(this);
+        for (JButton button : functionButtons) {
+            styleButton(button);
+            button.addActionListener(this);
         }
 
         for (int i = 0; i < 10; i++) {
@@ -70,50 +65,51 @@ public class CalculatorUI implements ActionListener {
         delButton.setBounds(150, 430, 100, 50);
         clrButton.setBounds(250, 430, 100, 50);
 
-        panel = new JPanel();
-        panel.setBounds(50, 100, 300, 300);
-        panel.setLayout(new GridLayout(4, 4, 10, 10));
-        panel.setBackground(new Color(20, 20, 20));
+        JPanel gridPanel = new JPanel();
+        gridPanel.setBounds(50, 100, 300, 300);
+        gridPanel.setLayout(new GridLayout(4, 4, 10, 10));
+        gridPanel.setBackground(new Color(20, 20, 20));
 
-        panel.add(numberButtons[1]);
-        panel.add(numberButtons[2]);
-        panel.add(numberButtons[3]);
-        panel.add(addButton);
-        panel.add(numberButtons[4]);
-        panel.add(numberButtons[5]);
-        panel.add(numberButtons[6]);
-        panel.add(subButton);
-        panel.add(numberButtons[7]);
-        panel.add(numberButtons[8]);
-        panel.add(numberButtons[9]);
-        panel.add(mulButton);
-        panel.add(decButton);
-        panel.add(numberButtons[0]);
-        panel.add(equButton);
-        panel.add(divButton);
+        gridPanel.add(numberButtons[1]);
+        gridPanel.add(numberButtons[2]);
+        gridPanel.add(numberButtons[3]);
+        gridPanel.add(addButton);
+        gridPanel.add(numberButtons[4]);
+        gridPanel.add(numberButtons[5]);
+        gridPanel.add(numberButtons[6]);
+        gridPanel.add(subButton);
+        gridPanel.add(numberButtons[7]);
+        gridPanel.add(numberButtons[8]);
+        gridPanel.add(numberButtons[9]);
+        gridPanel.add(mulButton);
+        gridPanel.add(decButton);
+        gridPanel.add(numberButtons[0]);
+        gridPanel.add(equButton);
+        gridPanel.add(divButton);
 
-        frame.add(panel);
-        frame.add(negButton);
-        frame.add(delButton);
-        frame.add(clrButton);
-        frame.add(textfield);
-        frame.setVisible(true);
+        mainPanel.add(gridPanel);
+        mainPanel.add(negButton);
+        mainPanel.add(delButton);
+        mainPanel.add(clrButton);
+        mainPanel.add(textfield);
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 
     private void styleButton(JButton button) {
-        button.setFont(myFont);
+        button.setFont(new Font("Roboto Mono", Font.BOLD, 18));
         button.setFocusable(false);
         button.setBackground(new Color(40, 40, 40));
         button.setForeground(Color.WHITE);
         button.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 2));
 
-        // Glowing hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(0, 60, 0));
                 button.setForeground(new Color(0, 255, 0));
             }
-
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(40, 40, 40));
                 button.setForeground(Color.WHITE);
