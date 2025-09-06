@@ -1,6 +1,6 @@
-#Object-Oriented-Programming
+# Object-Oriented-Programming
 ---
-##This repository is for my Object-Oriented Programming (OOP) class in the 1st Semester of 2025.
+## This repository is for my Object-Oriented Programming (OOP) class in the 1st Semester of 2025.
 
 It will contain my codes developed throughout the course, including:
 
