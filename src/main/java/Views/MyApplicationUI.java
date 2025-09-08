@@ -57,8 +57,6 @@ public class MyApplicationUI implements ActionListener {
             openWindow("Calculator", new CalculatorUI().getMainPanel());
         } else if (e.getSource() == toPalindrome) {
             openWindow("Palindrome Checker", new PalindromeUI().getMainPanel());
-        } else if (e.getSource() == toNotes) {
-            openWindow("My Notes", new NotesUI().getMainPanel());
         }
     }
 

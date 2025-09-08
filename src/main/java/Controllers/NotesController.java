@@ -1,40 +1,35 @@
 package Controllers;
 
+import dao.NotesDAO;
 import Models.Note;
-import java.util.ArrayList;
+
+import javax.swing.*;
 import java.util.List;
 
 public class NotesController {
-    private final List<Note> notes;
+    private NotesDAO noteDAO;
 
     public NotesController() {
-        this.notes = new ArrayList<>();
+        this.noteDAO = new NotesDAO();
     }
 
-    // Add a new note
-    public void addNote(Note note) {
-        notes.add(note);
-    }
-
-    // Get all notes
-    public List<Note> getNotes() {
-        return new ArrayList<>(notes); // return a copy for safety
-    }
-
-    // Clear all notes
-    public void clearNotes() {
-        notes.clear();
-    }
-
-    // Optional: delete by index
-    public void deleteNoteAt(int index) {
-        if (index >= 0 && index < notes.size()) {
-            notes.remove(index);
+    public void addNoteFromUI(String title, String content) {
+        if (title.isBlank() || content.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Title and content cannot be empty!");
+            return;
         }
+        noteDAO.addNote(new Note(title, content));
     }
 
-    // Optional: count of notes
-    public int getNoteCount() {
-        return notes.size();
+    public List<Note> fetchAllNotes() {
+        return noteDAO.getAllNotes();
+    }
+
+    public void updateNoteFromUI(int id, String title, String content) {
+        noteDAO.updateNote(id, title, content);
+    }
+
+    public void deleteNoteFromUI(int id) {
+        noteDAO.deleteNote(id);
     }
 }

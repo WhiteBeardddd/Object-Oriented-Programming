@@ -4,84 +4,75 @@ import Controllers.NotesController;
 import Models.Note;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.util.List;
 
-public class NotesUI implements ActionListener {
-    private JPanel mainPanel;
-    private JTextArea notesArea;
-    private JTextField inputField;
-    private JButton addButton, clearButton;
-
-    private NotesController controller = new NotesController();
-    private JButton button1;
+public class NotesUI extends JFrame {
+    private NotesController controller;
+    private JTextField titleField;
+    private JTextArea contentArea;
+    private JTable notesTable;
+    private DefaultTableModel tableModel;
 
     public NotesUI() {
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setPreferredSize(new Dimension(420, 400));
-        mainPanel.setBackground(new Color(20, 20, 20));
+        controller = new NotesController();
 
-        inputField = new JTextField();
-        inputField.setFont(new Font("Roboto Mono", Font.PLAIN, 16));
-        inputField.setBackground(Color.BLACK);
-        inputField.setForeground(new Color(0, 255, 0));
-        inputField.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 2));
+        setTitle("Notes App");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        notesArea = new JTextArea();
-        notesArea.setEditable(false);
-        notesArea.setFont(new Font("Roboto Mono", Font.PLAIN, 16));
-        notesArea.setBackground(Color.BLACK);
-        notesArea.setForeground(Color.WHITE);
+        // Top panel (form)
+        JPanel formPanel = new JPanel(new GridLayout(3, 1));
+        titleField = new JTextField();
+        contentArea = new JTextArea(3, 20);
 
-        JScrollPane scrollPane = new JScrollPane(notesArea);
+        JButton addButton = new JButton("Add Note");
+        addButton.addActionListener(e -> {
+            controller.addNoteFromUI(titleField.getText(), contentArea.getText());
+            refreshTable();
+            titleField.setText("");
+            contentArea.setText("");
+        });
 
-        addButton = new JButton("Add Note");
-        clearButton = new JButton("Clear All");
+        formPanel.add(new JLabel("Title:"));
+        formPanel.add(titleField);
+        formPanel.add(new JLabel("Content:"));
+        formPanel.add(new JScrollPane(contentArea));
+        formPanel.add(addButton);
 
-        styleButton(addButton);
-        styleButton(clearButton);
+        // Table for notes
+        String[] columns = {"ID", "Title", "Content", "Date"};
+        tableModel = new DefaultTableModel(columns, 0);
+        notesTable = new JTable(tableModel);
+        JScrollPane tableScroll = new JScrollPane(notesTable);
 
-        addButton.addActionListener(this);
-        clearButton.addActionListener(this);
+        // Layout
+        setLayout(new BorderLayout());
+        add(formPanel, BorderLayout.NORTH);
+        add(tableScroll, BorderLayout.CENTER);
 
-        JPanel inputPanel = new JPanel(new BorderLayout(5, 5));
-        inputPanel.add(inputField, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 5));
-        buttonPanel.add(addButton);
-        buttonPanel.add(clearButton);
-
-        inputPanel.add(buttonPanel, BorderLayout.EAST);
-
-        mainPanel.add(inputPanel, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        refreshTable();
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
-    private void styleButton(JButton button) {
-        button.setFont(new Font("Roboto Mono", Font.BOLD, 14));
-        button.setFocusable(false);
-        button.setBackground(new Color(40, 40, 40));
-        button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 2));
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addButton) {
-            String text = inputField.getText().trim();
-            if (!text.isEmpty()) {
-                controller.addNote(new Note(text));
-                notesArea.append("- " + text + "\n");
-                inputField.setText("");
+    private void refreshTable() {
+        try {
+            tableModel.setRowCount(0);
+            List<Note> notes = controller.fetchAllNotes();
+            for (Note n : notes) {
+                tableModel.addRow(new Object[]{
+                        n.getId(), n.getTitle(), n.getContent(), n.getDate()
+                });
             }
-        } else if (e.getSource() == clearButton) {
-            controller.clearNotes();
-            notesArea.setText("");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Error loading notes: " + ex.getMessage());
         }
+    }
+
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new NotesUI().setVisible(true));
     }
 }
