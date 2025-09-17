@@ -5,6 +5,7 @@ import Models.Note;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.List;
 
@@ -19,15 +20,19 @@ public class NotesUI extends JFrame {
         controller = new NotesController();
 
         setTitle("Notes App");
-        setSize(600, 400);
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Top panel (form)
-        JPanel formPanel = new JPanel(new GridLayout(3, 1));
+        JPanel formPanel = new JPanel(new GridLayout(6, 1));
         titleField = new JTextField();
         contentArea = new JTextArea(3, 20);
 
         JButton addButton = new JButton("Add Note");
+        JButton updateButton = new JButton("Update Note");
+        JButton deleteButton = new JButton("Delete Note");
+
+        // Add Note
         addButton.addActionListener(e -> {
             controller.addNoteFromUI(titleField.getText(), contentArea.getText());
             refreshTable();
@@ -35,17 +40,64 @@ public class NotesUI extends JFrame {
             contentArea.setText("");
         });
 
+        // Update Note
+        updateButton.addActionListener(e -> {
+            int selectedRow = notesTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                int id = (int) tableModel.getValueAt(selectedRow, 0);
+                String newTitle = titleField.getText();
+                String newContent = contentArea.getText();
+                controller.updateNoteFromUI(id, newTitle, newContent);
+                refreshTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a note to update.");
+            }
+        });
+
+        // Delete Note
+        deleteButton.addActionListener(e -> {
+            int selectedRow = notesTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                int id = (int) tableModel.getValueAt(selectedRow, 0);
+                int confirm = JOptionPane.showConfirmDialog(this,
+                        "Are you sure you want to delete this note?",
+                        "Confirm Delete", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    controller.deleteNoteFromUI(id);
+                    refreshTable();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a note to delete.");
+            }
+        });
+
         formPanel.add(new JLabel("Title:"));
         formPanel.add(titleField);
         formPanel.add(new JLabel("Content:"));
         formPanel.add(new JScrollPane(contentArea));
         formPanel.add(addButton);
+        formPanel.add(updateButton);
+        formPanel.add(deleteButton);
 
         // Table for notes
         String[] columns = {"ID", "Title", "Content", "Date"};
         tableModel = new DefaultTableModel(columns, 0);
         notesTable = new JTable(tableModel);
+        notesTable.setFillsViewportHeight(true);
+
+        JTableHeader header = notesTable.getTableHeader();
         JScrollPane tableScroll = new JScrollPane(notesTable);
+
+        // Table row selection → load into form fields
+        notesTable.getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = notesTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                String title = (String) tableModel.getValueAt(selectedRow, 1);
+                String content = (String) tableModel.getValueAt(selectedRow, 2);
+                titleField.setText(title);
+                contentArea.setText(content);
+            }
+        });
 
         // Layout
         setLayout(new BorderLayout());
@@ -70,7 +122,6 @@ public class NotesUI extends JFrame {
                     "Error loading notes: " + ex.getMessage());
         }
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new NotesUI().setVisible(true));

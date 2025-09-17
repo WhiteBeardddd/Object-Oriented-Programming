@@ -15,8 +15,11 @@ public class NotesDAO {
             stmt.setString(1, note.getTitle());
             stmt.setString(2, note.getContent());
             stmt.executeUpdate();
+            System.out.println("Notes Added Successfully: " + note.getTitle());
+
 
         } catch (SQLException e) {
+            System.err.println("Failed to add note!" + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -38,7 +41,11 @@ public class NotesDAO {
                 );
                 notes.add(note);
             }
+
+            System.out.println("Notes Fetched!: ");
+
         } catch (SQLException e) {
+            System.err.println("Failed to add note!" + e.getMessage());
             e.printStackTrace();
         }
         return notes;
@@ -54,7 +61,9 @@ public class NotesDAO {
             stmt.setInt(3, id);
             stmt.executeUpdate();
 
+            System.out.println("Notes Added Successfully: " + title);
         } catch (SQLException e) {
+            System.err.println("Failed to add note!" + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -67,7 +76,10 @@ public class NotesDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
 
+
+            System.out.println("Note#" + id + "successfully deleted");
         } catch (SQLException e) {
+            System.err.println("Failed to delete note!" + e.getMessage());
             e.printStackTrace();
         }
     }
